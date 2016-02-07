@@ -1,5 +1,7 @@
 # Be sure to restart your server when you modify this file. Action Cable runs in an EventMachine loop that does not support auto reloading.
 class PostingChannel < ApplicationCable::Channel
+  # If HTTPS is to ActionCable, then the Controller is to the Channel
+  #  (it handles a bunch of actions that the clientside JS sends)
   def subscribed
     # set the name of the stream to stream from when
     # the clientside js subscribes to this channel
@@ -13,6 +15,7 @@ class PostingChannel < ApplicationCable::Channel
   def post(data)
     # when the action 'post' is called clientside, this
     #  happens serverside
+    Post.create(title: data["title"], data["body"])
     ActionCable.server.broadcast("posts_channel",
      elem: make_html_li_from_data(data["title"], data["body"]))
   end
