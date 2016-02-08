@@ -23,7 +23,8 @@ class PostingChannel < ApplicationCable::Channel
     # then send it back to the clientside JS
     if post.save
       ActionCable.server.broadcast("posts_channel",
-       elem: make_html_li_from_data(data["title"], data["body"]))
+       elem: make_html_li_from_data(data["title"], data["body"]),
+       count_elem: render_count_elem)
     else
       ActionCable.server.broadcast("posts_channel",
         state: "error")
@@ -36,5 +37,11 @@ class PostingChannel < ApplicationCable::Channel
   #  theory the server should be faster at it than the clientside JS
   def make_html_li_from_data(title, body)
     "<li>#{title} : #{body}</li>"
+  end
+  
+  # We should also probably do the method above using partials too so
+  #  that we can use that template from elsewhere in the app
+  def render_count_elem
+    ApplicationController.render(partial: 'shared/count')
   end
 end

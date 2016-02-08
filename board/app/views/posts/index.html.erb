@@ -1,6 +1,12 @@
 <h1>Posts</h1>
-<p><%= Post.count %> posts currently available.</p>
-<ul id="posts-list"></ul>
+<div id="posts-count">
+  <%= render partial: 'shared/count' %>
+</div>
+<ul id="posts-list">
+<% @posts.each do |p| %>
+  <%= render partial: 'post_list_item', locals: { title: p.title, body: p.body } %>
+<% end %>
+</ul>
 <a href="#" id="post-button">Click me!</a>
 
 <script>

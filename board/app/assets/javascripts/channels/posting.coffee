@@ -12,6 +12,8 @@ App.posting = App.cable.subscriptions.create "PostingChannel",
     console.log("Received something")
     unless data['state'] == 'error'
       $('#posts-list').append(data['elem'])
+      $('#posts-count').empty()
+      $('#posts-count').append(data['count_elem'])
     else
       console.log("Not showing anything on HTML because error saving post")
 
