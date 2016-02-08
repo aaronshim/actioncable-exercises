@@ -4,7 +4,7 @@
 </div>
 <ul id="posts-list">
 <% @posts.each do |p| %>
-  <%= render partial: 'post_list_item', locals: { title: p.title, body: p.body } %>
+  <%= render partial: 'post_list_item', locals: { title: p.title, body: p.body, created_at: p.created_at } %>
 <% end %>
 </ul>
 Title<br>

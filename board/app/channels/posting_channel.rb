@@ -23,7 +23,7 @@ class PostingChannel < ApplicationCable::Channel
     # then send it back to the clientside JS
     if post.save
       ActionCable.server.broadcast("posts_channel",
-       elem: make_html_li_from_data(data["title"], data["body"]),
+       elem: render_post_item(post.title, post.body, post.created_at),
        count_elem: render_count_elem)
     else
       ActionCable.server.broadcast("posts_channel",
@@ -35,9 +35,9 @@ class PostingChannel < ApplicationCable::Channel
   # yes, we can just pass the JSON to the frontend but the Rails
   #  way is to let the server do the HTML generation because in
   #  theory the server should be faster at it than the clientside JS
-  def make_html_li_from_data(title, body)
+  def render_post_item(title, body, created_at)
     ApplicationController.render(partial: 'posts/post_list_item',
-     locals: {title: title, body: body})
+     locals: { title: title, body: body, created_at: created_at })
   end
   
   def render_count_elem
