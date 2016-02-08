@@ -27,7 +27,7 @@ class PostingChannel < ApplicationCable::Channel
        count_elem: render_count_elem)
     else
       ActionCable.server.broadcast("posts_channel",
-        state: "error")
+       state: "error")
     end
   end
 
@@ -36,11 +36,10 @@ class PostingChannel < ApplicationCable::Channel
   #  way is to let the server do the HTML generation because in
   #  theory the server should be faster at it than the clientside JS
   def make_html_li_from_data(title, body)
-    "<li>#{title} : #{body}</li>"
+    ApplicationController.render(partial: 'posts/post_list_item',
+     locals: {title: title, body: body})
   end
   
-  # We should also probably do the method above using partials too so
-  #  that we can use that template from elsewhere in the app
   def render_count_elem
     ApplicationController.render(partial: 'shared/count')
   end

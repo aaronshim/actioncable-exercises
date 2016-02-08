@@ -7,11 +7,15 @@
   <%= render partial: 'post_list_item', locals: { title: p.title, body: p.body } %>
 <% end %>
 </ul>
-<a href="#" id="post-button">Click me!</a>
+Title<br>
+<input id="post-title" type="text" name="title"><br>
+Content<br>
+<textarea id="post-body" name="body" rows="10" cols="30"></textarea><br>
+<a href="#" id="post-button">Post!</a>
 
 <script>
   $("#post-button").click( function() {
     console.log("from the view clicked post-button");
-    App.posting.post("something", "here");
+    App.posting.post($("#post-title").val(), $("#post-body").val());
   });
 </script>
