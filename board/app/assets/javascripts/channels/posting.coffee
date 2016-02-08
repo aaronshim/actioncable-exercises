@@ -10,7 +10,10 @@ App.posting = App.cable.subscriptions.create "PostingChannel",
   received: (data) ->
     # Called when there's incoming data on the websocket for this channel
     console.log("Received something")
-    $('#posts-list').append(data['elem'])
+    unless data['state'] == 'error'
+      $('#posts-list').append(data['elem'])
+    else
+      console.log("Not showing anything on HTML because error saving post")
 
   post: (title, body) ->
     console.log("posting something")

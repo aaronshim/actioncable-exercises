@@ -15,9 +15,19 @@ class PostingChannel < ApplicationCable::Channel
   def post(data)
     # when the action 'post' is called clientside, this
     #  happens serverside
-    Post.create(title: data["title"], data["body"])
-    ActionCable.server.broadcast("posts_channel",
-     elem: make_html_li_from_data(data["title"], data["body"]))
+    
+    # first save the model (with proper sanitation)
+    params = ActionController::Parameters.new(data)
+    post = Post.new(params.permit(:title, :body))
+    
+    # then send it back to the clientside JS
+    if post.save
+      ActionCable.server.broadcast("posts_channel",
+       elem: make_html_li_from_data(data["title"], data["body"]))
+    else
+      ActionCable.server.broadcast("posts_channel",
+        state: "error")
+    end
   end
 
   private
